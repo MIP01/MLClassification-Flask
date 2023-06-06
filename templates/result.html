@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section class="hero is-info is-small">
+  <div class="hero-body">
+    <div class="container has-text-centered">
+      <h1 class="title">
+          Prediction Results
+      </h1>
+    </div>
+  </div>
+</section>
+<div class="box cta">
+  <p class="has-text-centered">
+    <span class="tag is-primary is-size-6 mr-2"><b>Input</b></span><b class="is-size-4">{{ input_text }}</b>
+  </p>
+</div>
+<section class="container" style="display: flex; justify-content: center; gap: 20px;">
+  <div class="box cta">
+    <p class="has-text-centered">
+      <img src="{{ img_path }}" alt="Performance Metrics" style="width: 100%; height: auto;">
+    </p>
+  </div>
+  <div class="box cta" style="height: 100%;">
+    <p class="has-text-centered">
+      <img src="{{ img_path2 }}" alt="Prediction Distribution" style="width: 100%; height: auto;">
+    </p>
+  </div>
+</section>
+<section class="container">
+  <div class="columns is-multiline">
+    {% for prediction, model_name, accuracy, confidence in zip(predictions, model_names, accuracy_scores, confidences) %}
+    <div class="column is-4">
+      <div class="card is-shady modal-button" data-target="modal-card{{ loop.index }}">
+        <div class="card-content">
+          <div class="content">
+            <h4 class="is-size-6 box">{{ model_name }}</h4>
+            <p class="has-text-left">model accuracy: <b>{{ "{:.2f}%".format(accuracy * 100) }}</b></p>
+            <p class="has-text-left">category: <b>{{ prediction }}</b></p>
+            <p class="has-text-left"><label for="progress-bar">confidence: <b>{{ "{:.2f}%".format(confidence * 100) }}</b></label>
+            <progress class="progress is-small progress is-primary" value="{{ confidence }}" max="1"></progress>
+            <span class="is-link modal-button"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if loop.index % 3 == 0 %}
+  </div>
+</section>
+<!--  ===============
+HERE BE MODALS
+===============  -->
+<section class="container">
+  <div class="columns is-multiline">
+    {% endif %}
+    {% endfor %}
+  </div>
+</section>
+
+{% for prediction, model_name, accuracy, confidence, precision, recall, f1_  in zip(predictions, model_names, accuracy_scores, confidences, precision_scores, recall_scores, f1_scores) %}
+<div id="modal-card{{ loop.index }}" class="modal modal-fx-3dSlit">
+  <div class="modal-background"></div>
+  <div class="modal-content is-tiny">
+    <div class="card">
+      <div class="card-content">
+        <div class="content">
+          <h4 class="is-size-6 box">{{ model_name }}</h4>
+          <p class="has-text-left">accuracy score: <b>{{ accuracy }}</b></p>
+          <p class="has-text-left">precision score: <b>{{ precision }}</b></p>
+          <p class="has-text-left">recall score: <b>{{ recall }}</b></p>
+          <p class="has-text-left">f1 score: <b>{{ f1_ }}</b></p>
+          <p class="has-text-left">category: <b>{{ prediction }}</b></p>
+          <p class="has-text-left">confidence score: <b>{{ confidence }}</b></p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <button class="modal-close is-large" aria-label="close"></button>
+</div>
+{% endfor %}
+
+<!-- Display total bullying and non-bullying confidence -->
+<section class="container" style="margin-top: 12px; margin-bottom: 12px;">
+  <div class="columns is-multiline">
+    <div class="column is-8">
+      <p class="has-text-centered">
+        <img src="{{ img_path3 }}" alt="Performance Metrics" style="width: 100%; height: auto;">
+      </p>
+    </div>
+    <div class="column is-4">
+      <div class="card is-shady" style="height: 48%";>
+        <div class="card-content">
+          <div class="content">
+            <h4 class="is-size-6 box">Distribution Confidence Score</h4>
+            <p class="has-text-left">Total Bullying Score:<b> {{ total_bullying_confidence }}</b></p>
+            <p class="has-text-left">Total Non-Bullying Score:<b> {{ total_non_bullying_confidence }}</b></p>
+          </div>
+        </div>
+      </div>
+      <div class="card is-shady" style="height: 48%; margin-top: 14px";>
+        <div class="card-content">
+          <div class="content">
+            <h4 class="is-size-6 box">Kesimpulan</h4>
+            <p class="has-text-left"><b>{{ conclusion }}</b></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
+
+<script src="https://unpkg.com/bulma-modal-fx/dist/js/modal-fx.min.js"></script>
+{% endblock %}
