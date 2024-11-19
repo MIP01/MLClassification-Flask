@@ -1,5 +1,5 @@
 # Gunakan image Python yang sesuai sebagai base image
-FROM python-3.8.0
+FROM python:3.8.0
 
 # Set working directory di dalam container
 WORKDIR /app
