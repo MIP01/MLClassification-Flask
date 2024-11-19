@@ -1,3 +1,4 @@
+import os
 from flask import Flask, make_response, render_template, request, flash, redirect, url_for
 from itertools import zip_longest
 import pandas as pd 
@@ -229,6 +230,10 @@ def predict(string_data):
 
 
     #--------------------Visualisasi-------------------#
+    # Membuat folder static jika belum ada
+    if not os.path.exists('static'):
+        os.makedirs('static')
+
     # Generate word cloud
     wc = wordcloud.WordCloud(collocations=False, colormap="tab20b").generate(" ".join(tokenized_data))
     
