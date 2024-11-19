@@ -12,7 +12,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Install NLTK dan unduh resource 'punkt'
 RUN pip install nltk
-RUN python -c "import nltk; nltk.download('punkt')"
+RUN python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords')"
 
 # Salin semua file dari aplikasi ke dalam container
 COPY . /app/
